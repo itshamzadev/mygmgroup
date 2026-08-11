@@ -3,10 +3,9 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "scripts": {
+   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview",
     "start": "node --experimental-sqlite server/index.js",
     "server": "node --experimental-sqlite server/index.js",
     "dev:server": "node --experimental-sqlite --watch server/index.js",
