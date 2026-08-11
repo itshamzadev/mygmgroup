@@ -47,11 +47,20 @@ async function ensureAdminAccount() {
   }
 
   const existing = await Admin.findOne({ email });
-  if (existing) return;
-
   const passwordHash = await bcrypt.hash(password, 12);
-  await Admin.create({ email, passwordHash });
-  console.log('Initial admin account created for:', email);
+
+  if (!existing) {
+    await Admin.create({ email, passwordHash });
+    console.log('Initial admin account created for:', email);
+    return;
+  }
+
+  const passwordMatches = await bcrypt.compare(password, existing.passwordHash);
+  if (!passwordMatches) {
+    existing.passwordHash = passwordHash;
+    await existing.save();
+    console.log('Admin password synchronized from environment for:', email);
+  }
 }
 
 app.get('/api/health', (req, res) => {
