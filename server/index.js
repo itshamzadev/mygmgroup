@@ -4,6 +4,9 @@ import cors from 'cors';
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
+import { existsSync } from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import Admin from './models/Admin.js';
 import SiteContent from './models/SiteContent.js';
 import { requireAuth } from './auth.js';
@@ -20,6 +23,8 @@ import {
 const app = express();
 const port = Number(process.env.PORT) || 5000;
 const mongoUri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/mygm_group';
+const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const distPath = path.join(projectRoot, 'dist');
 
 app.use(
   cors({
@@ -186,6 +191,16 @@ app.delete('/api/admin/mailboxes/:email', requireAuth, (req, res) => {
     return mailErrorResponse(res, error);
   }
 });
+
+if (existsSync(distPath)) {
+  app.use(express.static(distPath));
+  app.use((req, res, next) => {
+    if (req.method === 'GET' && !req.path.startsWith('/api')) {
+      return res.sendFile(path.join(distPath, 'index.html'));
+    }
+    return next();
+  });
+}
 
 mongoose.set('strictQuery', true);
 mongoose

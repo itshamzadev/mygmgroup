@@ -7,13 +7,13 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "server": "node server/index.js",
-    "dev:server": "node --watch server/index.js",
+    "start": "node --experimental-sqlite server/index.js",
+    "server": "node --experimental-sqlite server/index.js",
+    "dev:server": "node --experimental-sqlite --watch server/index.js",
     "seed:admin": "node server/seedAdmin.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",
-    "better-sqlite3": "^13.0.3",
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",

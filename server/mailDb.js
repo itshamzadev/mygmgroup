@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs';
 import { execFile } from 'node:child_process';
+import { DatabaseSync } from 'node:sqlite';
 import { promisify } from 'node:util';
-import Database from 'better-sqlite3';
 
 const execFileAsync = promisify(execFile);
 const dbPath = process.env.MAIL_DB_PATH || '/www/vmail/postfixadmin.db';
@@ -18,8 +18,8 @@ function configuredDatabase() {
 
 function openDatabase() {
   configuredDatabase();
-  const db = new Database(dbPath);
-  db.pragma('busy_timeout = 5000');
+  const db = new DatabaseSync(dbPath);
+  db.exec('PRAGMA busy_timeout = 5000');
   return db;
 }
 
@@ -90,15 +90,19 @@ export async function createMailbox({ localPart, password, quota = 10240 }) {
     const existing = db.prepare('SELECT username FROM mailbox WHERE username = ?').get(username);
     if (existing) throw new Error('This mailbox already exists.');
 
-    const transaction = db.transaction(() => {
+    db.exec('BEGIN IMMEDIATE');
+    try {
       db.prepare(
         'INSERT INTO domain (domain, active) VALUES (?, 1) ON CONFLICT(domain) DO UPDATE SET active = 1',
       ).run(mailDomain);
       db.prepare(
         'INSERT INTO mailbox (username, password, maildir, quota, active) VALUES (?, ?, ?, ?, 1)',
       ).run(username, passwordHash, maildir, numericQuota);
-    });
-    transaction();
+      db.exec('COMMIT');
+    } catch (error) {
+      db.exec('ROLLBACK');
+      throw error;
+    }
   } finally {
     db.close();
   }
