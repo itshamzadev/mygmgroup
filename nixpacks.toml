@@ -1,8 +1,11 @@
 [variables]
-NIXPACKS_NODE_VERSION = "24"
+NIXPACKS_NODE_VERSION = "22"
 
 [phases.setup]
 aptPkgs = ["...", "dovecot-core"]
 
+[phases.build]
+cmds = ["npm run build"]
+
 [start]
-cmd = "npm run start"
+cmd = "npm start"
