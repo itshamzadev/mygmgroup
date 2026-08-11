@@ -37,6 +37,23 @@ function databaseIsReady() {
   return mongoose.connection.readyState === 1;
 }
 
+async function ensureAdminAccount() {
+  const email = String(process.env.ADMIN_EMAIL || '').trim().toLowerCase();
+  const password = String(process.env.ADMIN_PASSWORD || '');
+
+  if (!email || !password || password.startsWith('REPLACE_WITH_')) {
+    console.warn('ADMIN_EMAIL or ADMIN_PASSWORD is not configured; admin login is not seeded.');
+    return;
+  }
+
+  const existing = await Admin.findOne({ email });
+  if (existing) return;
+
+  const passwordHash = await bcrypt.hash(password, 12);
+  await Admin.create({ email, passwordHash });
+  console.log('Initial admin account created for:', email);
+}
+
 app.get('/api/health', (req, res) => {
   res.json({
     ok: true,
@@ -205,7 +222,14 @@ if (existsSync(distPath)) {
 mongoose.set('strictQuery', true);
 mongoose
   .connect(mongoUri)
-  .then(() => console.log('MongoDB connected.'))
+  .then(async () => {
+    console.log('MongoDB connected.');
+    try {
+      await ensureAdminAccount();
+    } catch (error) {
+      console.error('Could not initialize admin account:', error.message);
+    }
+  })
   .catch((error) => {
     console.warn('MongoDB is not connected:', error.message);
     console.warn('The public site will use default content until MongoDB is available.');
