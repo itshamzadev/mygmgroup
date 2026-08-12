@@ -9,6 +9,15 @@ function clone(value) {
   return JSON.parse(JSON.stringify(value));
 }
 
+function normalizeContent(value) {
+  const next = clone(value);
+  next.socialLinks = {
+    younas: value.socialLinks?.younas || '',
+    shakeel: value.socialLinks?.shakeel || '',
+  };
+  return next;
+}
+
 function apiRequest(url, options = {}) {
   return fetch(url, {
     ...options,
@@ -147,7 +156,7 @@ export default function AdminPanel() {
         throw new Error(data.message || 'Could not load website content.');
       }
 
-      setContent(data);
+      setContent(normalizeContent(data));
     } catch (loadError) {
       setError(loadError.message);
     } finally {
@@ -202,7 +211,7 @@ export default function AdminPanel() {
         throw new Error(data.message || 'Could not save website content.');
       }
 
-      setContent(data);
+      setContent(normalizeContent(data));
       setMessage('Changes saved successfully. Public website is updated.');
     } catch (saveError) {
       setError(saveError.message);
@@ -297,7 +306,7 @@ export default function AdminPanel() {
             {[
               ['mail-accounts', 'Email accounts', 'fa-envelope'],
               ['basic-info', 'Basic information', 'fa-building'],
-              ['social-links', 'Social links', 'fa-share-alt'],
+              ['social-links', 'WhatsApp links', 'fa-whatsapp'],
               ['office-info', 'Office information', 'fa-map-marker-alt'],
               ['hero-slides', 'Hero slides', 'fa-images'],
               ['features', 'Why choose us', 'fa-star'],
@@ -325,10 +334,8 @@ export default function AdminPanel() {
           </div>
         </EditorSection>
 
-        <EditorSection id="social-links" title="Social links" description="These links appear in the top bar, footer and owner contact buttons.">
+        <EditorSection id="social-links" title="WhatsApp links" description="These WhatsApp links appear in the top bar, footer and owner contact buttons.">
           <div className="admin-grid admin-grid-two">
-            <Field label="Facebook URL" value={content.socialLinks.facebook} onChange={(value) => setPath(['socialLinks', 'facebook'], value)} />
-            <Field label="Instagram URL" value={content.socialLinks.instagram} onChange={(value) => setPath(['socialLinks', 'instagram'], value)} />
             <Field label="Younas WhatsApp URL" value={content.socialLinks.younas} onChange={(value) => setPath(['socialLinks', 'younas'], value)} />
             <Field label="Shakeel WhatsApp URL" value={content.socialLinks.shakeel} onChange={(value) => setPath(['socialLinks', 'shakeel'], value)} />
           </div>

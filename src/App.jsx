@@ -52,10 +52,8 @@ function Topbar({ content }) {
         <div className="col-lg-6 ps-5 text-start">
           <div className="h-100 d-inline-flex align-items-center text-white">
             <span>Follow Us:</span>
-            <a className="btn btn-link text-light" href={socialLinks.facebook} title="FB Page"><i className="fab fa-facebook-f" /></a>
             <a className="btn btn-link text-light" href={socialLinks.younas} title="MD.Younas"><i className="fab fa-whatsapp" /></a>
             <a className="btn btn-link text-light" href={socialLinks.shakeel} title="MD.Shakeel"><i className="fab fa-whatsapp" /></a>
-            <a className="btn btn-link text-light" href={socialLinks.instagram} title="Insta AC"><i className="fab fa-instagram" /></a>
           </div>
         </div>
         <div className="col-lg-6 text-end">
@@ -132,10 +130,8 @@ function Footer({ navigate, content }) {
               <p className="mb-2"><i className="fa fa-phone-alt me-3" />{content.phone}</p>
               <p className="mb-2"><i className="fa fa-envelope me-3" />{content.office.email}</p>
               <div className="d-flex pt-3">
-                <a className="btn btn-square btn-primary rounded-circle me-2" href={socialLinks.facebook} title="FB Page"><i className="fab fa-facebook-f" /></a>
                 <a className="btn btn-square btn-primary rounded-circle me-2" href={socialLinks.younas} title="MD.Younas"><i className="fab fa-whatsapp" /></a>
                 <a className="btn btn-square btn-primary rounded-circle me-2" href={socialLinks.shakeel} title="MD.Shakeel"><i className="fab fa-whatsapp" /></a>
-                <a className="btn btn-square btn-primary rounded-circle me-2" href={socialLinks.instagram} title="Insta AC"><i className="fab fa-instagram" /></a>
               </div>
             </div>
             <div className="col-lg-3 col-md-6">
@@ -156,7 +152,7 @@ function Footer({ navigate, content }) {
       </div>
       <div className="container-fluid copyright bg-dark py-4">
         <div className="container text-center">
-          <p className="mb-2">Copyright &copy; <a className="fw-semi-bold" href={socialLinks.facebook}>{content.brandName}</a>, All Right Reserved.</p>
+          <p className="mb-2">Copyright &copy; <a className="fw-semi-bold" href={socialLinks.younas}>{content.brandName}</a>, All Right Reserved.</p>
           <p className="mb-0">Developed By <a className="fw-semi-bold" href="https://ngl.link/mh_hamza">MH Hamza Younas</a></p>
         </div>
       </div>

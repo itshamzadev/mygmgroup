@@ -2,10 +2,8 @@ const defaultContent = {
   brandName: 'MYGM Group',
   phone: '+97167478205',
   socialLinks: {
-    facebook: 'https://www.facebook.com/profile.php?id=61575707743695',
     younas: 'https://wa.link/10o1pz',
     shakeel: 'https://wa.link/98kssf',
-    instagram: 'https://www.instagram.com/mygmgroup',
   },
   office: {
     address: 'Al Nakheel 1, Near Ajman Chamber Ajman, UAE',
